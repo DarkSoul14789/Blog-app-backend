@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shubh.blog.payloads.ApiResponse;
 import com.shubh.blog.payloads.UserDto;
 import com.shubh.blog.services.UserService;
 
@@ -29,30 +30,30 @@ public class UserController {
 	@PostMapping(path = "/create")
 	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
 		UserDto createdUserDto = this.userService.createUser(userDto);
-		return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
+		return new ResponseEntity<UserDto>(createdUserDto, HttpStatus.CREATED);
 	}
 	
 	
 //	update user
 	@PutMapping(path = "/update/{userId}")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable String userId) {
-		UserDto updatedUserDto = this.userService.updateUser(userDto, Integer.parseInt(userId));
-		return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
+	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Integer userId) {
+		UserDto updatedUserDto = this.userService.updateUser(userDto, userId);
+		return new ResponseEntity<UserDto>(updatedUserDto, HttpStatus.OK);
 	}
 	
 	
 //	delete user
 	@DeleteMapping(path = "/{userId}")
-	public ResponseEntity<HttpStatus> deleteUser(@PathVariable String userId) {
+	public ResponseEntity<ApiResponse> deleteUser(@PathVariable String userId) {
 		this.userService.deleteUser(Integer.parseInt(userId));
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		return new ResponseEntity<ApiResponse>(new ApiResponse(true, "User deleted successfully"), HttpStatus.OK);
 	}
 	
 //	get user
 	@GetMapping(path = "/{userId}")
-	public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
-		UserDto userDto = this.userService.getUser(Integer.parseInt(userId));
-		return new ResponseEntity<>(userDto, HttpStatus.OK);
+	public ResponseEntity<UserDto> getUser(@PathVariable Integer userId) {
+		UserDto userDto = this.userService.getUser(userId);
+		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
 	}
 	
 	
