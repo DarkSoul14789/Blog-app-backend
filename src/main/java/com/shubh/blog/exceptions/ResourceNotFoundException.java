@@ -3,6 +3,7 @@ package com.shubh.blog.exceptions;
 import lombok.Getter;
 import lombok.Setter;
 
+@SuppressWarnings("serial")
 @Getter
 @Setter
 public class ResourceNotFoundException extends RuntimeException{
