@@ -18,6 +18,8 @@ import com.shubh.blog.payloads.ApiResponse;
 import com.shubh.blog.payloads.UserDto;
 import com.shubh.blog.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -28,7 +30,7 @@ public class UserController {
 	
 //	Post user
 	@PostMapping(path = "/create")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
 		UserDto createdUserDto = this.userService.createUser(userDto);
 		return new ResponseEntity<UserDto>(createdUserDto, HttpStatus.CREATED);
 	}
@@ -36,7 +38,7 @@ public class UserController {
 	
 //	update user
 	@PutMapping(path = "/update/{userId}")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Integer userId) {
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer userId) {
 		UserDto updatedUserDto = this.userService.updateUser(userDto, userId);
 		return new ResponseEntity<UserDto>(updatedUserDto, HttpStatus.OK);
 	}
