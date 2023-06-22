@@ -5,16 +5,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shubh.blog.payloads.ApiResponse;
 import com.shubh.blog.payloads.PostDto;
 import com.shubh.blog.services.PostService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +31,7 @@ public class PostController {
 //	create
 	@PostMapping("/posts/create")
 	public ResponseEntity<PostDto> createPost(
+			@Valid
 			@RequestBody PostDto postDto,
 			@RequestParam Integer userId,
 			@RequestParam Integer categoryId
@@ -61,6 +67,21 @@ public class PostController {
 	public ResponseEntity<List<PostDto>> getAllPosts(){
 		List<PostDto> postDtos = this.postService.getPosts();
 		return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
+	}
+	
+//	Delete post
+	@DeleteMapping("/post/delete/{pId}")
+	public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer pId){
+		this.postService.deletePost(pId);
+		ApiResponse apiResponse = new ApiResponse(true, "Post successfully deleted");
+		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
+	}
+	
+//	Update post
+	@PutMapping("/post/update/{pId}")
+	public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto pDto, @PathVariable Integer pId){
+		PostDto updatedPostDto = this.postService.updatePost(pDto, pId);
+		return new ResponseEntity<PostDto>(updatedPostDto, HttpStatus.OK);
 	}
 }
 
