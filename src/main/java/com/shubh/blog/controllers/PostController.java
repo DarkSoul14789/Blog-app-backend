@@ -1,6 +1,5 @@
 package com.shubh.blog.controllers;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,16 +43,24 @@ public class PostController {
 	
 //	Get post by user
 	@GetMapping("/posts/user/{userId}")
-	public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId){
-		List<PostDto> postDtos = this.postService.getPostsByUser(userId);
-		return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
+	public ResponseEntity<PostResponse> getPostsByUser(
+			@PathVariable Integer userId,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber
+			){
+		PostResponse postResponse = this.postService.getPostsByUser(userId, pageSize, pageNumber);
+		return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
 	}
 	
 //	Get Posts by category
 	@GetMapping("/posts/category/{cId}")
-	public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer cId){
-		List<PostDto> postDtos = this.postService.getPostsByCategory(cId);
-		return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
+	public ResponseEntity<PostResponse> getPostsByCategory(
+			@PathVariable Integer cId,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber
+			){
+		PostResponse postResponse = this.postService.getPostsByCategory(cId,pageSize,pageNumber);
+		return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
 	}
 	
 //	Get Post by post id

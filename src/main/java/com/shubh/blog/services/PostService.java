@@ -23,10 +23,10 @@ public interface PostService {
 	PostResponse getPosts(Integer pageSize, Integer pageNumber);
 	
 //	get all posts by category
-	List<PostDto> getPostsByCategory(Integer cId);
+	PostResponse getPostsByCategory(Integer cId, Integer pageSize, Integer pageNumber);
 	
 //	get all posts by user
-	List<PostDto> getPostsByUser(Integer uId);
+	PostResponse getPostsByUser(Integer uId, Integer pageSize, Integer pageNumber);
 	
 //	search posts by keyword
 	List<PostDto> searchPosts(String keyword);
