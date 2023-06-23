@@ -5,11 +5,15 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.shubh.blog.exceptions.*;
 import com.shubh.blog.entities.User;
 import com.shubh.blog.payloads.UserDto;
+import com.shubh.blog.payloads.UserResponse;
 import com.shubh.blog.repositories.UserRepo;
 import com.shubh.blog.services.UserService;
 
@@ -52,12 +56,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDto> getAllUsers() {
-		List<User> users= this.userRepo.findAll();
+	public UserResponse getAllUsers(Integer pageSize, Integer pageNumber) {
+		Pageable p = PageRequest.of(pageNumber, pageSize);
+		Page<User> usersPage= this.userRepo.findAll(p);
+		List<User> users = usersPage.getContent();
 		
 		List<UserDto> userDtoList = users.stream().map(user->this.userToDto(user)).collect(Collectors.toList());
 		
-		return userDtoList;
+		UserResponse userResponse = new UserResponse();
+		userResponse.setContent(userDtoList);
+		userResponse.setPageNumber(usersPage.getNumber());
+		userResponse.setPageSize(usersPage.getSize());
+		userResponse.setTotalElements(usersPage.getTotalElements());
+		userResponse.setTotalPages(usersPage.getTotalPages());
+		userResponse.setLastPage(usersPage.isLast());
+		return userResponse;
 	}
 
 	@Override
