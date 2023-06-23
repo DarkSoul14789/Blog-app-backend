@@ -5,10 +5,14 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.shubh.blog.entities.Category;
 import com.shubh.blog.exceptions.ResourceNotFoundException;
 import com.shubh.blog.payloads.CategoryDto;
+import com.shubh.blog.payloads.CategoryResponse;
 import com.shubh.blog.repositories.CategoryRepo;
 import com.shubh.blog.services.CategoryService;
 
@@ -56,11 +60,21 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
 	@Override
-	public List<CategoryDto> getCategories() {
-		List<Category> cList = this.cRepo.findAll();
+	public CategoryResponse getCategories(Integer pageSize, Integer pageNumber) {
+		Pageable p = PageRequest.of(pageNumber, pageSize);
+		Page<Category> cPage = this.cRepo.findAll(p);
+		List<Category> cList = cPage.getContent();
 		List<CategoryDto> cDtoList = new ArrayList<CategoryDto>();
 		cList.forEach((c)->cDtoList.add(this.categoryToDto(c)));
-		return cDtoList;
+		
+		CategoryResponse cRes = new CategoryResponse();
+		cRes.setContent(cDtoList);
+		cRes.setPageNumber(cPage.getNumber());
+		cRes.setPageSize(cPage.getSize());
+		cRes.setTotalElements(cPage.getTotalElements());
+		cRes.setTotalPages(cPage.getTotalPages());
+		cRes.setLastPage(cPage.isLast());
+		return cRes;
 	}
 	
 	private CategoryDto categoryToDto(Category c) {

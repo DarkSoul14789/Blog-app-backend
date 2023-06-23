@@ -1,8 +1,8 @@
 package com.shubh.blog.services;
 
-import java.util.List;
 
 import com.shubh.blog.payloads.CategoryDto;
+import com.shubh.blog.payloads.CategoryResponse;
 
 public interface CategoryService {
 	
@@ -10,6 +10,6 @@ public interface CategoryService {
 	CategoryDto updateCategory(CategoryDto cDto, Integer cId);
 	void deleteCategory(Integer cId);
 	CategoryDto getCategory(Integer cId);
-	List<CategoryDto> getCategories();
+	CategoryResponse getCategories(Integer pageSize, Integer pageNumber);
 	
 }

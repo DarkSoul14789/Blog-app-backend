@@ -1,6 +1,5 @@
 package com.shubh.blog.controllers;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shubh.blog.payloads.ApiResponse;
 import com.shubh.blog.payloads.CategoryDto;
+import com.shubh.blog.payloads.CategoryResponse;
 import com.shubh.blog.services.CategoryService;
 
 import jakarta.validation.Valid;
@@ -58,9 +59,12 @@ public class CategoryController {
 	
 //	Get all categories
 	@GetMapping("/")
-	public ResponseEntity<List<CategoryDto>> getCategories(){
-		List<CategoryDto> cDtoList = this.cService.getCategories();
-		return new ResponseEntity<List<CategoryDto>>(cDtoList, HttpStatus.OK);
+	public ResponseEntity<CategoryResponse> getCategories(
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber
+			){
+		CategoryResponse cRes = this.cService.getCategories(pageSize, pageNumber);
+		return new ResponseEntity<CategoryResponse>(cRes, HttpStatus.OK);
 	}
 	
 }
