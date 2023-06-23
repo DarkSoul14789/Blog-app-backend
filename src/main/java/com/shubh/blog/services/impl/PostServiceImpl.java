@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.shubh.blog.entities.Category;
@@ -81,9 +82,15 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostResponse getPosts(Integer pageSize, Integer pageNumber) {
-				
-		Pageable p = PageRequest.of(pageNumber, pageSize);
+	public PostResponse getPosts(Integer pageSize, Integer pageNumber, String sortBy, String sortDir) {
+		Sort sort = null;
+		if(sortDir.equalsIgnoreCase("dsc")) {
+			sort = Sort.by(sortBy).descending();
+		}
+		else {
+			sort = Sort.by(sortBy).ascending();
+		}
+		Pageable p = PageRequest.of(pageNumber, pageSize, sort);
 		
 		Page<Post> pagePosts = this.postRepo.findAll(p);
 		List<Post> posts = pagePosts.getContent();
