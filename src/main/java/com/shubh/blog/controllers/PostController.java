@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shubh.blog.payloads.ApiResponse;
 import com.shubh.blog.payloads.PostDto;
+import com.shubh.blog.payloads.PostResponse;
 import com.shubh.blog.services.PostService;
 
 import jakarta.validation.Valid;
@@ -64,9 +65,12 @@ public class PostController {
 	
 //	Get all posts
 	@GetMapping("/posts")
-	public ResponseEntity<List<PostDto>> getAllPosts(){
-		List<PostDto> postDtos = this.postService.getPosts();
-		return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
+	public ResponseEntity<PostResponse> getAllPosts(
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber
+			){
+		PostResponse postDtos = this.postService.getPosts(pageSize, pageNumber);
+		return new ResponseEntity<PostResponse>(postDtos, HttpStatus.OK);
 	}
 	
 //	Delete post
