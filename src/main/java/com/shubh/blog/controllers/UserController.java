@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shubh.blog.config.AppConstants;
 import com.shubh.blog.payloads.ApiResponse;
 import com.shubh.blog.payloads.UserDto;
 import com.shubh.blog.payloads.UserResponse;
@@ -63,8 +64,8 @@ public class UserController {
 //	get all users
 	@GetMapping(path = "/")
 	public ResponseEntity<UserResponse> getUsers(
-			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber
+			@RequestParam(value = "pageSize", defaultValue =AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+			@RequestParam(value = "pageNumber", defaultValue =AppConstants.PAGE_NUMBER, required = false) Integer pageNumber
 			) {
 		UserResponse userResponse = this.userService.getAllUsers(pageSize, pageNumber);
 		return new ResponseEntity<UserResponse>(userResponse , HttpStatus.OK);
