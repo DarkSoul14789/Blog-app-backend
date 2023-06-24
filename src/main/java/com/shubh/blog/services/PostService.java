@@ -1,7 +1,5 @@
 package com.shubh.blog.services;
 
-import java.util.List;
-
 import com.shubh.blog.payloads.PostDto;
 import com.shubh.blog.payloads.PostResponse;
 
@@ -29,5 +27,5 @@ public interface PostService {
 	PostResponse getPostsByUser(Integer uId, Integer pageSize, Integer pageNumber);
 	
 //	search posts by keyword
-	List<PostDto> searchPosts(String keyword);
+	PostResponse searchPosts(String keyword, Integer pageSize, Integer pageNumber);
 }

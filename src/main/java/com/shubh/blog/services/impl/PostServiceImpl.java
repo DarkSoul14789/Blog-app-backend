@@ -150,9 +150,22 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDto> searchPosts(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+	public PostResponse searchPosts(String keyword, Integer pageSize, Integer pageNumber) {
+		Pageable p = PageRequest.of(pageNumber, pageSize);
+		
+		Page<Post> pagePosts = this.postRepo.findByTitleContaining(keyword, p);
+		List<Post> posts = pagePosts.getContent();
+		List<PostDto> postDtos = posts
+				.stream().map((post)->this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+		
+		PostResponse postResponse = new PostResponse();
+		postResponse.setContent(postDtos);
+		postResponse.setPageNumber(pagePosts.getNumber());
+		postResponse.setPageSize(pagePosts.getSize());
+		postResponse.setTotalElements(pagePosts.getTotalElements());
+		postResponse.setTotalPages(pagePosts.getTotalPages());
+		postResponse.setLastPage(pagePosts.isLast());
+		return postResponse;
 	}
 
 	
