@@ -28,4 +28,5 @@ public class UserDto {
 	@NotEmpty(message = "About must not be empty")
 	private String about;
 	
+	
 }
