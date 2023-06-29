@@ -8,12 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.shubh.blog.exceptions.*;
+import com.shubh.blog.config.AppConstants;
+import com.shubh.blog.entities.Role;
 import com.shubh.blog.entities.User;
 import com.shubh.blog.payloads.UserDto;
 import com.shubh.blog.payloads.UserResponse;
+import com.shubh.blog.repositories.RoleRepo;
 import com.shubh.blog.repositories.UserRepo;
 import com.shubh.blog.services.UserService;
 
@@ -24,7 +28,13 @@ public class UserServiceImpl implements UserService {
 	private UserRepo userRepo;
 	
 	@Autowired
+	private RoleRepo roleRepo;
+	
+	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Override
 	public UserDto createUser(UserDto userDto) {
@@ -92,6 +102,24 @@ public class UserServiceImpl implements UserService {
 	private UserDto userToDto(User user) {
 		UserDto userDto = this.modelMapper.map(user, UserDto.class);
 		return userDto;
+	}
+
+	@Override
+	public UserDto registerNewUser(UserDto userDto) {
+		
+		User user = this.modelMapper.map(userDto, User.class);
+//		Encode password
+		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+		
+//		Assign role
+		Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+		
+		user.getRoles().add(role);
+		
+//		Save user to db
+		User savedUser = this.userRepo.save(user);
+		
+		return this.modelMapper.map(savedUser, UserDto.class);
 	}
 	
 }

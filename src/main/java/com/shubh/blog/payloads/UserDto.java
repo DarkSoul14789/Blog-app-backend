@@ -1,6 +1,10 @@
 package com.shubh.blog.payloads;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,11 +29,12 @@ public class UserDto {
 	
 	@NotEmpty
 	@Size(min = 4, max = 10, message = "Password must be between 4 and 10 chars")
-	@JsonIgnore
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	
 	@NotEmpty(message = "About must not be empty")
 	private String about;
 	
-	
+	@JsonProperty(access = Access.READ_ONLY)
+	private Set<RoleDto> roles = new HashSet<>();
 }
