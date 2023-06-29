@@ -1,5 +1,7 @@
 package com.shubh.blog.payloads;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -23,6 +25,7 @@ public class UserDto {
 	
 	@NotEmpty
 	@Size(min = 4, max = 10, message = "Password must be between 4 and 10 chars")
+	@JsonIgnore
 	private String password;
 	
 	@NotEmpty(message = "About must not be empty")
